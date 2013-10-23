@@ -4,11 +4,6 @@ module OssActiveRecord
   module Searchable
     extend ActiveSupport::Concern
 
-    included do
-      extend ClassMethods
-      include InstanceMethods
-    end
-    
     module ClassMethods
       @@oss_field_types = [:integer, :text, :string, :time, :suggestion] # supported field types
       @@oss_mutex = Mutex.new
@@ -83,14 +78,6 @@ module OssActiveRecord
         doc
       end
     end
-  end
-
-  #TODO Working on deletion
-  module InstanceMethods
-    def delete!
-      self.class.index_instance
-    end
-    alias :delete :delete!
   end
 end
 
