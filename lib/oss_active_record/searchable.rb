@@ -4,6 +4,10 @@ module OssActiveRecord
   module Searchable
     extend ActiveSupport::Concern
 
+    included do
+      after_destroy :oss_delete
+    end
+
     module ClassMethods
       @@oss_field_types = [:integer, :text, :string, :time, :suggestion] # supported field types
       @@oss_mutex = Mutex.new
@@ -59,6 +63,11 @@ module OssActiveRecord
           records.find { |record| record.id == id.to_i }
         end
       end
+
+    end
+
+    def oss_delete
+      self.class.index_instance.delete_by_id(self.id)
     end
 
     def index
